@@ -14,6 +14,7 @@ struct UserCell: View {
     
     @State private var isFavorite = false
     @State private var rating = 3
+    @State private var isDetailScreenActive = false
     
     var body: some View {
         
@@ -59,12 +60,21 @@ struct UserCell: View {
                 
                 FavoriteButton(isFavorite: $isFavorite)
                     .frame(width: 10, height: 10)
+                    .buttonStyle(PlainButtonStyle())
             }
             .padding()
             .presentationCornerRadius(15)
             
+            NavigationLink(
+                destination: UserDetailView(viewModel: UserDetailViewModel(user: user)),
+                isActive: $isDetailScreenActive,
+                label: {
+                    EmptyView()
+                })
+            .hidden()
+            
             Button {
-                
+                isDetailScreenActive = true
             } label: {
                 Text("Записаться")
                     .frame(width: 250)
@@ -73,6 +83,7 @@ struct UserCell: View {
             .padding()
             .background(Color.pink)
             .cornerRadius(15)
+            .buttonStyle(PlainButtonStyle())
         }
     }
 }
