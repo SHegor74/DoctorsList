@@ -6,7 +6,6 @@
 //
 
 import SwiftUI
-import Kingfisher
 
 struct UserDetailView: View {
     
@@ -16,11 +15,19 @@ struct UserDetailView: View {
         VStack {
             VStack(alignment: .leading, spacing: 20) {
                 HStack(alignment: .center, spacing: 10) {
-                    KFImage(URL(string: viewModel.avatar))
-                        .resizable()
-                        .frame(width: 129, height: 100)
-                        .aspectRatio(contentMode: .fit)
-                        .clipShape(Circle())
+                    AsyncImage(url: URL(string: viewModel.user.avatar ?? "")) { image in
+                        image
+                            .resizable()
+                            .frame(width: 129, height: 100)
+                            .aspectRatio(contentMode: .fit)
+                            .clipShape(Circle())
+                    } placeholder: {
+                        Image("no_photo")
+                            .resizable()
+                            .frame(width: 100, height: 100)
+                            .aspectRatio(contentMode: .fit)
+                            .clipShape(Circle())
+                    }
                     
                     VStack(alignment: .leading) {
                         Text(viewModel.lastName)

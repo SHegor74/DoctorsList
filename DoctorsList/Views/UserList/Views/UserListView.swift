@@ -28,11 +28,7 @@ struct UserListView: View {
             
             List {
                 ForEach(filteredUsers) { user in
-                    NavigationLink {
-                        UserDetailView(viewModel: UserDetailViewModel(user: user))
-                    } label: {
-                        UserCell(user: user)
-                    }
+                    UserCell(user: user)
                 }
             }
             .listRowSpacing(10)

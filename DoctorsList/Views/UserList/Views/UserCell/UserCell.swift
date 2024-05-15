@@ -6,7 +6,6 @@
 //
 
 import SwiftUI
-import Kingfisher
 
 struct UserCell: View {
     
@@ -14,17 +13,26 @@ struct UserCell: View {
     
     @State private var isFavorite = false
     @State private var rating = 3
+    @State private var isDetailScreenActive = false
     
     var body: some View {
         
         VStack {
             HStack(alignment: .top) {
                 VStack(alignment: .leading) {
-                    KFImage(URL(string: user.avatar ?? ""))
-                        .resizable()
-                        .frame(width: 129, height: 100)
-                        .aspectRatio(contentMode: .fit)
-                        .clipShape(Circle())
+                    AsyncImage(url: URL(string: user.avatar ?? "")) { image in
+                        image
+                            .resizable()
+                            .frame(width: 129, height: 100)
+                            .aspectRatio(contentMode: .fit)
+                            .clipShape(Circle())
+                    } placeholder: {
+                        Image("no_photo")
+                            .resizable()
+                            .frame(width: 100, height: 100)
+                            .aspectRatio(contentMode: .fit)
+                            .clipShape(Circle())
+                    }
                 }
                 .frame(width: 100)
                 
@@ -59,12 +67,22 @@ struct UserCell: View {
                 
                 FavoriteButton(isFavorite: $isFavorite)
                     .frame(width: 10, height: 10)
+                    .buttonStyle(PlainButtonStyle())
+                
             }
             .padding()
             .presentationCornerRadius(15)
             
+            NavigationLink(
+                destination: UserDetailView(viewModel: UserDetailViewModel(user: user)),
+                isActive: $isDetailScreenActive,
+                label: {
+                    EmptyView()
+                })
+            .hidden()
+            
             Button {
-                
+                isDetailScreenActive = true
             } label: {
                 Text("Записаться")
                     .frame(width: 250)
@@ -73,6 +91,7 @@ struct UserCell: View {
             .padding()
             .background(Color.pink)
             .cornerRadius(15)
+            .buttonStyle(PlainButtonStyle())
         }
     }
 }
